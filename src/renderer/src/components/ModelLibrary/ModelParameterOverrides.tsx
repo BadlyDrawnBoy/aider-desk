@@ -34,6 +34,7 @@ const PROVIDER_OVERRIDES_MAP: Partial<Record<LlmProviderName, ComponentType<Prov
   cerebras: DefaultModelOverrides,
   deepseek: DefaultModelOverrides,
   groq: DefaultModelOverrides,
+  minimax: DefaultModelOverrides,
   lmstudio: DefaultModelOverrides,
   ollama: DefaultModelOverrides,
   'zai-plan': DefaultModelOverrides,

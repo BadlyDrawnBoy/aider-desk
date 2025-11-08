@@ -253,6 +253,9 @@
   "anthropic": {
     "apiKey": "API 密钥"
   },
+  "minimax": {
+    "apiKey": "API 密钥"
+  },
   "gemini": {
     "apiKey": "API 密钥",
     "customBaseUrl": "自定义基础 URL",
@@ -305,6 +308,7 @@
     "gemini": "Gemini",
     "groq": "Groq",
     "lmstudio": "LM Studio",
+    "minimax": "MiniMax",
     "ollama": "Ollama",
     "openai": "OpenAI",
     "openai-compatible": "OpenAI Compatible",

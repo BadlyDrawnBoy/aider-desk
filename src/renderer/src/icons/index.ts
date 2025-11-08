@@ -5,6 +5,7 @@ export { CerebrasIcon } from './CerebrasIcon';
 export { DeepseekIcon } from './DeepseekIcon';
 export { GeminiIcon } from './GeminiIcon';
 export { GroqIcon } from './GroqIcon';
+export { MiniMaxIcon } from './MiniMaxIcon';
 export { LmStudioIcon } from './LmStudioIcon';
 export { OllamaIcon } from './OllamaIcon';
 export { OpenAiIcon } from './OpenAiIcon';

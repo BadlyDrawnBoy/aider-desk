@@ -29,6 +29,7 @@ export type LlmProviderName =
   | 'gemini'
   | 'groq'
   | 'lmstudio'
+  | 'minimax'
   | 'ollama'
   | 'openai'
   | 'openai-compatible'
@@ -56,6 +57,7 @@ export const AVAILABLE_PROVIDERS: LlmProviderName[] = [
   'gemini',
   'groq',
   'lmstudio',
+  'minimax',
   'ollama',
   'openai',
   'openai-compatible',
@@ -87,6 +89,12 @@ export interface AnthropicProvider extends LlmProviderBase {
   apiKey: string;
 }
 export const isAnthropicProvider = (provider: LlmProviderBase): provider is AnthropicProvider => provider.name === 'anthropic';
+
+export interface MiniMaxProvider extends LlmProviderBase {
+  name: 'minimax';
+  apiKey: string;
+}
+export const isMiniMaxProvider = (provider: LlmProviderBase): provider is MiniMaxProvider => provider.name === 'minimax';
 
 export interface GeminiProvider extends LlmProviderBase {
   name: 'gemini';
@@ -185,6 +193,7 @@ export const isZaiPlanProvider = (provider: LlmProviderBase): provider is ZaiPla
 export type LlmProvider =
   | OpenAiProvider
   | AnthropicProvider
+  | MiniMaxProvider
   | AzureProvider
   | GeminiProvider
   | VertexAiProvider
@@ -204,6 +213,7 @@ export const DEFAULT_PROVIDER_MODEL: Partial<Record<LlmProviderName, string>> = 
   cerebras: 'llama3.1-8b',
   deepseek: 'deepseek-chat',
   gemini: 'gemini-2.5-pro',
+  minimax: 'abab6.5-chat',
   openai: 'gpt-5',
   openrouter: 'anthropic/claude-sonnet-4',
   requesty: 'anthropic/claude-sonnet-4-20250514',
@@ -391,6 +401,12 @@ export const getDefaultProviderParams = <T extends LlmProvider>(providerName: Ll
         name: 'anthropic',
         apiKey: '',
       } satisfies AnthropicProvider;
+      break;
+    case 'minimax':
+      provider = {
+        name: 'minimax',
+        apiKey: '',
+      } satisfies MiniMaxProvider;
       break;
     case 'gemini':
       provider = {

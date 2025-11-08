@@ -247,6 +247,9 @@
   "anthropic": {
     "apiKey": "API Key"
   },
+  "minimax": {
+    "apiKey": "API Key"
+  },
   "gemini": {
     "apiKey": "API Key",
     "customBaseUrl": "Custom Base URL",
@@ -308,6 +311,7 @@
     "gemini": "Gemini",
     "groq": "Groq",
     "lmstudio": "LM Studio",
+    "minimax": "MiniMax",
     "ollama": "Ollama",
     "openai": "OpenAI",
     "openai-compatible": "OpenAI Compatible",

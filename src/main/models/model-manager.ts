@@ -11,6 +11,7 @@ import { cerebrasProviderStrategy } from './providers/cerebras';
 import { deepseekProviderStrategy } from './providers/deepseek';
 import { geminiProviderStrategy } from './providers/gemini';
 import { groqProviderStrategy } from './providers/groq';
+import { minimaxProviderStrategy } from './providers/minimax';
 import { lmStudioProviderStrategy } from './providers/lm-studio';
 import { ollamaProviderStrategy } from './providers/ollama';
 import { openaiProviderStrategy } from './providers/openai';
@@ -71,6 +72,7 @@ export class ModelManager {
     deepseek: deepseekProviderStrategy,
     gemini: geminiProviderStrategy,
     groq: groqProviderStrategy,
+    minimax: minimaxProviderStrategy,
     lmstudio: lmStudioProviderStrategy,
     ollama: ollamaProviderStrategy,
     openai: openaiProviderStrategy,

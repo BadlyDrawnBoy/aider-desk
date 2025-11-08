@@ -4,6 +4,7 @@ import {
   DeepseekProvider,
   GeminiProvider,
   GroqProvider,
+  MiniMaxProvider,
   LlmProvider,
   LmStudioProvider,
   OllamaProvider,
@@ -425,6 +426,7 @@ export interface SettingsData {
     anthropic?: AnthropicProvider;
     gemini?: GeminiProvider;
     groq?: GroqProvider;
+    minimax?: MiniMaxProvider;
     bedrock?: BedrockProvider;
     deepseek?: DeepseekProvider;
     ollama?: OllamaProvider;

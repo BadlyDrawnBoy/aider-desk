@@ -5,6 +5,7 @@ export * from './CerebrasParameters';
 export * from './DeepseekParameters';
 export * from './GeminiParameters';
 export * from './GroqParameters';
+export * from './MiniMaxParameters';
 export * from './LmStudioParameters';
 export * from './OllamaParameters';
 export * from './OpenAiParameters';

@@ -13,6 +13,7 @@ import { getEffectiveEnvironmentVariable } from '@/utils';
 
 const MINIMAX_BASE_URL = 'https://api.minimax.io/anthropic';
 const MINIMAX_MODELS_ENDPOINT = `${MINIMAX_BASE_URL}/v1/models`;
+const KNOWN_MINIMAX_MODELS = ['MiniMax-M2', 'MiniMax-M2-Stable'] as const;
 
 export const loadMiniMaxModels = async (
   profile: ProviderProfile,
@@ -34,6 +35,33 @@ export const loadMiniMaxModels = async (
     return { models: [], success: false };
   }
 
+  const toModel = (modelId: string): Model => {
+    const info = modelsInfo[modelId];
+
+    return {
+      id: modelId,
+      providerId: profile.id,
+      ...(info ?? {}),
+    } satisfies Model;
+  };
+
+  const sanitizeReason = (reason: string): string => {
+    return reason
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
+  const fallbackToKnownModels = (reason: string): LoadModelsResponse => {
+    const sanitizedReason = sanitizeReason(reason) || 'Unknown error';
+
+    logger.warn(`MiniMax models API unavailable (${sanitizedReason}). Falling back to static MiniMax model list: ${KNOWN_MINIMAX_MODELS.join(', ')}`);
+
+    const models = KNOWN_MINIMAX_MODELS.map((modelId) => toModel(modelId));
+
+    return { models, success: true };
+  };
+
   try {
     const response = await fetch(MINIMAX_MODELS_ENDPOINT, {
       headers: {
@@ -42,31 +70,58 @@ export const loadMiniMaxModels = async (
       },
     });
     if (!response.ok) {
-      return {
-        models: [],
-        success: false,
-        error: `MiniMax models API response failed: ${response.status} ${response.statusText} ${await response.text()}`,
-      };
+      const errorText = await response.text().catch(() => '');
+      const reasonParts = [`${response.status} ${response.statusText}`];
+      if (errorText) {
+        reasonParts.push(errorText);
+      }
+
+      return fallbackToKnownModels(reasonParts.join(' - '));
     }
 
     const data = await response.json();
-    const models =
-      data.data?.map((m: { id: string }) => {
-        const info = modelsInfo[m.id];
-        return {
-          id: m.id,
-          providerId: profile.id,
-          ...info,
-        } satisfies Model;
-      }) || [];
+    const remoteModels = Array.isArray(data?.data) ? data.data : [];
+    const modelIds = remoteModels
+      .map((model: unknown) => {
+        if (typeof model === 'string') {
+          return model;
+        }
+
+        if (model && typeof model === 'object') {
+          const candidate = (model as { id?: unknown }).id ?? (model as { model?: unknown }).model ?? (model as { name?: unknown }).name;
+
+          if (typeof candidate === 'string') {
+            return candidate;
+          }
+        }
+
+        return undefined;
+      })
+      .filter((modelId): modelId is string => typeof modelId === 'string' && modelId.length > 0);
+
+    if (modelIds.length === 0) {
+      return fallbackToKnownModels('Empty or unsupported MiniMax models response payload');
+    }
+
+    const models = modelIds.map((modelId) => toModel(modelId));
 
     return { models, success: true };
   } catch (error) {
-    return {
-      models: [],
-      success: false,
-      error: typeof error === 'string' ? error : error instanceof Error ? error.message : JSON.stringify(error),
-    };
+    let reason: string;
+
+    if (typeof error === 'string') {
+      reason = error;
+    } else if (error instanceof Error) {
+      reason = error.message;
+    } else {
+      try {
+        reason = JSON.stringify(error);
+      } catch {
+        reason = String(error);
+      }
+    }
+
+    return fallbackToKnownModels(reason);
   }
 };
 

@@ -16,6 +16,7 @@ AiderDesk supports multiple Large Language Model (LLM) providers to power your A
 - [Vertex AI](#vertex-ai)
 - [Deepseek](#deepseek)
 - [Groq](#groq)
+- [MiniMax](#minimax)
 - [Bedrock](#bedrock)
 - [OpenAI Compatible](#openai-compatible)
 - [Ollama](#ollama)
@@ -196,6 +197,27 @@ Groq offers ultra-fast inference with specialized hardware acceleration.
 3. Enter the API key in the Model Library Groq configuration
 4. Add the models you want to use (e.g., `llama3-70b-8192`, `mixtral-8x7b-32768`)
 5. Or set the `GROQ_API_KEY` environment variable
+
+---
+
+## MiniMax
+
+MiniMax offers Anthropic-compatible models through the MiniMax API platform.
+
+### Configuration Parameters
+
+- **API Key**: Your MiniMax API key for authentication
+  - Environment variable: `MINIMAX_API_KEY`
+  - Get your API key from the [MiniMax Console](https://platform.minimax.chat/)
+
+### Available Models
+
+AiderDesk automatically falls back to a static MiniMax model list when the MiniMax models endpoint is unavailable. The current static list includes:
+
+- `MiniMax-M2`
+- `MiniMax-M2-Stable`
+
+These models are exposed through Anthropic-compatible endpoints, so they appear with the `anthropic/` prefix in the model selector.
 
 ---
 
